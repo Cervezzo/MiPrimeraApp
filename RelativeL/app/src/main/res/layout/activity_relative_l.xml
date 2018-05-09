@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RelativeL"
+    style="@style/Labels1">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:textStyle="bold"
+        style="@style/Labels1"
+        />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width ="match_parent"
+        android:layout_height ="wrap_content"
+        android:layout_below = "@id/textView"
+        android:inputType="textPersonName" />
+    <TextView
+        android:layout_below="@id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/passwordView"
+        android:text="@string/password"
+        android:textStyle="bold"
+        style="@style/Labels1"
+
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordView"
+        android:id="@+id/password"
+        android:inputType="textPassword"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonLogin"
+        android:layout_below="@id/password"
+        android:text="@string/login"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonCancel"
+        android:text="@string/cancel"
+        android:layout_below="@id/password"
+        android:layout_toEndOf="@id/buttonLogin"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/registerButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/register"
+
+        />
+
+    </RelativeLayout>
+
+
+
+

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Profile</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="introuser">Introduzca su usuario</string>
+    <string name="intropass">Introduzca su password</string>
+    <string name="introemail">Introduzca su email</string>
+</resources>

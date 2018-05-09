@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context=".ProfileActivity"
+    >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:layout_marginStart="5dp"
+        style="@style/Labels1"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/username"
+        android:inputType="text"
+        android:hint="@string/introuser"
+        android:textSize="10dp"
+        android:lines="1"
+        android:maxLength="15"
+        android:layout_marginStart="10dp"
+        android:textStyle="italic"
+
+        />
+
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        android:layout_marginStart="5dp"
+        style="@style/Labels1"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/password"
+        android:inputType="textPassword"
+        android:hint="@string/intropass"
+        android:textSize="10dp"
+        android:maxLength="26"
+        android:layout_marginStart="10dp"
+        android:textStyle="italic"
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/email"
+        android:textStyle="bold"
+        android:layout_marginStart="5dp"
+        style="@style/Labels1"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        android:inputType="textEmailAddress"
+        android:hint="@string/introemail"
+        android:textSize="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="italic"
+
+        />
+
+    //Botones//
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sexo"
+                style="@style/Labels1"
+                android:text="M">
+
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            >
+            <TextView
+                android:id="@+id/age"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/Labels1"
+                android:text="Age"
+                />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:hint="Age..."/>
+
+
+
+        </LinearLayout>
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:onClick="buttonSave"
+        android:padding="15dp"
+        android:textAllCaps="false"
+        android:text="Save"
+        android:minWidth="150dp"
+
+
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:onClick="buttonDelete"
+        android:padding="15dp"
+        android:textAllCaps="false"
+        android:text="Delete"
+        android:minWidth="150dp"
+
+
+
+        />
+    </LinearLayout>
+
+</LinearLayout>
