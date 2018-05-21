@@ -100,7 +100,8 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences.Editor myEditor = myPreferences.edit();
         myEditor.putString("username_key", usernameEditText.getText().toString());
         myEditor.putString("username_email_key", emailEditText.getText().toString());
-        myEditor.putInt("username_age_key", Integer.parseInt(ageEditText.getText().toString()));
+        myEditor.putInt("username_age_key",
+                Integer.parseInt(ageEditText.getText().toString()));
         if (radioButtonMale.isChecked()) {
             myEditor.putString("gender_key", "H");
         } else if (radioButtonFemale.isChecked()) {
@@ -191,7 +192,24 @@ public class ProfileActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
 
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
 
 
 
