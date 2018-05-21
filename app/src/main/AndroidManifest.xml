@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.teaching.miprimeraapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,7 +15,9 @@
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".login.view.LoginActivity" />
-        <activity android:name=".GameDetailActivity" />
+        <activity
+            android:name=".view.GameDetailActivity"
+            android:parentActivityName=".ListActivity" />
         <activity
             android:name=".login.view.LoginActivity"
             android:label="Login"
@@ -26,6 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FragmentTestActivity" />
+        <activity android:name=".CanvasActivity"></activity>
+        <activity android:name=".WebViewActivity"></activity>
     </application>
 
 </manifest>
