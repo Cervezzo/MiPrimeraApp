@@ -1,13 +1,13 @@
 package com.android.teaching.miprimeraapp.login.view;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
@@ -34,6 +34,19 @@ public class LoginActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences mySharedPreferences = getSharedPreferences(
+                getString(R.string.user_preferences),
+                Context.MODE_PRIVATE
+        );
+        String savedUsername = mySharedPreferences.getString("username_key",
+                "");
+        usernameEditText.setText(savedUsername);
+    }
+
     /**
      * Método que se ejecuta cuando el usuario pulsa en "Login"
      *
@@ -51,6 +64,15 @@ public class LoginActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(password)) {
             passwordEditText.setError(getString(R.string.password_error));
         } else {
+            SharedPreferences mySharedPreferences = getSharedPreferences(
+                    getString(R.string.user_preferences),
+                    Context.MODE_PRIVATE
+            );
+            SharedPreferences.Editor myEditor = mySharedPreferences.edit();
+            myEditor.putString("username_key", username);
+            myEditor.apply();
+
+
             // Do login
             Intent profileIntent = new Intent(this, ProfileActivity.class);
             startActivity(profileIntent);
