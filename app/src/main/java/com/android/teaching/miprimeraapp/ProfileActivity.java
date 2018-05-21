@@ -1,7 +1,9 @@
 package com.android.teaching.miprimeraapp;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -63,6 +65,48 @@ public class ProfileActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences myPreferences = getSharedPreferences(
+                getString(R.string.user_preferences),
+                Context.MODE_PRIVATE
+        );
+        String usernameValue = myPreferences.getString("username_key", "");
+        usernameEditText.setText(usernameValue);
+        String usernameEmail = myPreferences.getString("username_email_key", "");
+        emailEditText.setText(usernameEmail);
+        int ageValue = myPreferences.getInt("username_age_key", -1);
+        if (ageValue != -1) {
+            ageEditText.setText(ageValue + "");
+        }
+        String genderValue = myPreferences.getString("gender_key", "");
+        if (genderValue.equals("H")) {
+            radioButtonMale.setChecked(true);
+        } else if (genderValue.equals("M")) {
+            radioButtonFemale.setChecked(true);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences myPreferences = getSharedPreferences(
+                getString(R.string.user_preferences),
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor myEditor = myPreferences.edit();
+        myEditor.putString("username_key", usernameEditText.getText().toString());
+        myEditor.putString("username_email_key", emailEditText.getText().toString());
+        myEditor.putInt("username_age_key", Integer.parseInt(ageEditText.getText().toString()));
+        if (radioButtonMale.isChecked()) {
+            myEditor.putString("gender_key", "H");
+        } else if (radioButtonFemale.isChecked()) {
+            myEditor.putString("gender_key", "M");
+        }
+        myEditor.apply();
     }
 
     @Override
