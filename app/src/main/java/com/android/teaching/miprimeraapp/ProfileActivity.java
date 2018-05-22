@@ -4,7 +4,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Calendar;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -65,6 +69,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        // Cargar imagen de perfil
+        if (isExternalStorageReadable()) {
+            File profileImage = new File(getExternalFilesDir(null), "profile.png");
+            if (profileImage.exists()) {
+                ImageView profileImageView = findViewById(R.id.image_profile);
+                profileImageView.setImageURI(Uri.fromFile(profileImage));
+            }
+        }
     }
 
     @Override
