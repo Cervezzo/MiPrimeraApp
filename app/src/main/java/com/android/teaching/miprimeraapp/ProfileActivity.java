@@ -1,9 +1,11 @@
 package com.android.teaching.miprimeraapp;
 
 import android.app.DatePickerDialog;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -159,6 +161,29 @@ public class ProfileActivity extends AppCompatActivity {
         } else if(radioButtonFemale.isChecked()) {
             // El usuario ha seleccionado "M"
             Log.d("ProfileActivity", "Gender: female");
+        }
+
+        // Guardar usuario en base de datos
+        AppDatabase myDatabase = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "my-database-name")
+                .allowMainThreadQueries()
+                .build();
+        try {
+
+            User myNewUser = new User();
+            myNewUser.setUsername(usernameEditText.getText().toString());
+            myNewUser.setPassword(passwordEditText.getText().toString());
+            myNewUser.setEmail(emailEditText.getText().toString());
+            myNewUser.setAge(ageEditText.getText().toString());
+            if (radioButtonMale.isChecked()) {
+                myNewUser.setGender("H");
+            } else if (radioButtonFemale.isChecked()){
+                myNewUser.setGender("M");
+            }
+            myDatabase.userDao().insert(myNewUser);
+        } catch (SQLiteConstraintException ex) {
+            Toast.makeText(this, "Username is already registered",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
