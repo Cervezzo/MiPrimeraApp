@@ -13,11 +13,23 @@
         <activity android:name=".MainActivity" />
 
         <service android:name=".firebase.MyFirebaseMessagingService">
-        <intent-filter>
-            <action
-                android:name="com.google.firebase.MESSAGING_EVENT"/>
-        </intent-filter>
-    </service>
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".firebase.FirebaseInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_child" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
 
         <activity android:name=".SecondActivity" />
         <activity
@@ -38,9 +50,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FragmentTestActivity" />
-        <activity android:name=".CanvasActivity"></activity>
-        <activity android:name=".WebViewActivity"></activity>
+        <activity
+            android:name=".FragmentTestActivity" />
+        <activity
+            android:name=".CanvasActivity"/>
+        <activity
+            android:name=".WebViewActivity"></activity>
     </application>
+
 
 </manifest>

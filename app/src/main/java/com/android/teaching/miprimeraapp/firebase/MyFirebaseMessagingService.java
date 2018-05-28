@@ -1,8 +1,13 @@
 package com.android.teaching.miprimeraapp.firebase;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.android.teaching.miprimeraapp.R;
@@ -21,16 +26,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("Mensaje", "Data receiver: " + data.toString());
 
         if (data.containsKey("show_notification")){
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("HOLA CLASE")
-                    .setContentInfo("que haseiiiiiiis")
-                    .setColor(getColor(R.color.dark_red));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationForOreo();
 
-            NotificationManager manager = (NotificationManager)
-                    getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(1, builder.build());
+            }else{
+                 createNotificationForLowerThanOreo();
+                }
+            }
         }
 
+
+
+private void createNotificationForLowerThanOreo(){
+    NotificationCompat.Builder builder = new NotificationCompat
+            .Builder(this)
+            .setSmallIcon(R.drawable.ic_child)
+            .setContentTitle("HOLA CLASE")
+            .setContentInfo("que haseiiiiiiis");
+
+    NotificationManager notificationManager =
+            getSystemService(NotificationManager.class);
+    notificationManager.notify(1, builder.build());
+}
+
+@TargetApi(26)
+private void createNotificationForOreo() {
+    NotificationChannel channel = new NotificationChannel("ID", "name", NotificationManager.IMPORTANCE_HIGH);
+    NotificationManager notificationManager = getSystemService(NotificationManager.class);
+    notificationManager.createNotificationChannel(channel);
+
+    Notification.Builder builder = new Notification
+            .Builder(this, "ID")
+            .setSmallIcon(R.drawable.ic_child)
+            .setContentTitle("HOLA CLASE")
+            .setContentText("hoy estais de lunes blablabla");
+
+    notificationManager.notify(1, builder.build());
     }
 }
+

@@ -30,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,10 +47,12 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        String token = FirebaseInstanceId.getInstance().getToken();
         //PRUEBAS FIREBASE
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = firebaseDatabase.getReference("cabesa");
-        myRef.setValue("melón");
+        DatabaseReference myRef = firebaseDatabase
+                .getReference("device_push_token");
+        myRef.setValue(token);
 
         gamesInteractorFirebase = new GamesInteractorFirebase();
         gamesInteractorFirebase.getGames(new GameInteractorCallback() {
