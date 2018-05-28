@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/game_image_container"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -13,15 +13,6 @@
         android:background="@drawable/overwatch_landing">
 
         <ImageView
-            android:layout_centerInParent="true"
-            android:id="@+id/background"
-            android:scaleType="fitCenter"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/overwatch_landing"/>
-
-        <ImageView
-            android:layout_centerInParent="true"
             android:id="@+id/game_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -30,7 +21,7 @@
             android:padding="8dp"
             android:background="#88000000"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

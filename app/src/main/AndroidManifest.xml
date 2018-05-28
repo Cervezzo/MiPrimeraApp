@@ -6,19 +6,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_games"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-
-        <service android:name=".firebase.MyFirebaseMessagingService">
-        <intent-filter>
-            <action
-                android:name="com.google.firebase.MESSAGING_EVENT"/>
-        </intent-filter>
-    </service>
-
         <activity android:name=".SecondActivity" />
         <activity
             android:name=".ProfileActivity"

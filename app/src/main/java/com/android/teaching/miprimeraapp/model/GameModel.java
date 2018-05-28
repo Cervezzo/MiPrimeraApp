@@ -6,20 +6,16 @@ public class GameModel {
     private String name;
     private String description;
     private String officialWebsiteUrl;
-    private String icon;
-    private String background;
+    private int iconDrawable;
+    private int backgroundDrawable;
 
-    public GameModel(){
-
-    }
-
-    public GameModel(int id, String name, String description, String officialWebsiteUrl, String icon, String background) {
+    public GameModel(int id, String name, String description, String officialWebsiteUrl, int iconDrawable, int backgroundDrawable) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.officialWebsiteUrl = officialWebsiteUrl;
-        this.icon = icon;
-        this.background = background;
+        this.iconDrawable = iconDrawable;
+        this.backgroundDrawable = backgroundDrawable;
     }
 
     public int getId() {
@@ -54,19 +50,19 @@ public class GameModel {
         this.officialWebsiteUrl = officialWebsiteUrl;
     }
 
-    public String getIcon() {
-        return icon;
+    public int getIconDrawable() {
+        return iconDrawable;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setIconDrawable(int iconDrawable) {
+        this.iconDrawable = iconDrawable;
     }
 
-    public String getBackground() {
-        return background;
+    public int getBackgroundDrawable() {
+        return backgroundDrawable;
     }
 
-    public void setBackground(String background) {
-        this.background = background;
+    public void setBackgroundDrawable(int backgroundDrawable) {
+        this.backgroundDrawable = backgroundDrawable;
     }
 }
