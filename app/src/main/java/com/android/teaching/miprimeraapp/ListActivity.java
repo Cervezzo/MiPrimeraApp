@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,37 +19,54 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.teaching.miprimeraapp.interactors.GameInteractorCallback;
 import com.android.teaching.miprimeraapp.interactors.GamesInteractor;
+import com.android.teaching.miprimeraapp.interactors.GamesInteractorFirebase;
 import com.android.teaching.miprimeraapp.login.view.LoginActivity;
 import com.android.teaching.miprimeraapp.view.GameDetailActivity;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
-
-    ArrayList<String> gameNames = new ArrayList<String>();
-    ArrayList<Integer> gameIcons = new ArrayList<Integer>();
-
+    private  GamesInteractorFirebase gamesInteractorFirebase;
     private MyAdapter myAdapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        gameNames.add("Overwatch");
-        gameNames.add("League of Legends");
+        //PRUEBAS FIREBASE
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = firebaseDatabase.getReference("cabesa");
+        myRef.setValue("melón");
 
-        gameIcons.add(R.drawable.overwatch_icon);
-        gameIcons.add(R.drawable.lol_icon);
+        gamesInteractorFirebase = new GamesInteractorFirebase();
+        gamesInteractorFirebase.getGames(new GameInteractorCallback() {
+            @Override
+            public void onGamesAvailable() {
+                findViewById(R.id.loading).setVisibility(View.GONE);
+                //Aquí, GamesInteractorFirebase ya tiene la lista de juegos
+
+                myAdapter = new MyAdapter();
+                listView.setAdapter(myAdapter);
+            }
+        });
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        ListView listView = findViewById(R.id.list_view);
-        myAdapter = new MyAdapter();
-        listView.setAdapter(myAdapter);
-
+        listView = findViewById(R.id.list_view);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -87,8 +105,6 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         // El usuario ha seleccionado un elemento del menu contextual
-        gameNames.remove(0);
-        gameIcons.remove(0);
         myAdapter.notifyDataSetChanged();
         return super.onContextItemSelected(item);
     }
@@ -97,7 +113,7 @@ public class ListActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return gameNames.size();
+            return gamesInteractorFirebase.getGames().size();
         }
 
         @Override
@@ -116,10 +132,14 @@ public class ListActivity extends AppCompatActivity {
             View rowView = inflater.inflate(R.layout.list_item, parent, false);
 
             ImageView icon = rowView.findViewById(R.id.image_view);
-            icon.setImageResource(gameIcons.get(position));
+
+            //cargar imágenes!!!!!!
+            Glide.with(ListActivity.this).load(gamesInteractorFirebase.getGames().get(position).getIcon()).into(icon);
+            //icon.setImageResource(gameIcons.get(position));
 
             TextView textView = rowView.findViewById(R.id.text_view);
-            textView.setText(gameNames.get(position));
+            textView.setText(gamesInteractorFirebase.getGames()
+                    .get(position).getName());
 
             return rowView;
         }

@@ -11,17 +11,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.teaching.miprimeraapp.R;
 import com.android.teaching.miprimeraapp.WebViewActivity;
+import com.android.teaching.miprimeraapp.interactors.GameInteractorCallback;
 import com.android.teaching.miprimeraapp.interactors.GamesInteractor;
+import com.android.teaching.miprimeraapp.interactors.GamesInteractorFirebase;
 import com.android.teaching.miprimeraapp.model.GameModel;
+import com.bumptech.glide.Glide;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class GameDetailFragment extends Fragment {
+    public GamesInteractorFirebase gamesInteractorFirebase;
 
 
     public GameDetailFragment() {
@@ -44,32 +49,44 @@ public class GameDetailFragment extends Fragment {
                 false);
 
         // Obtener GameModel de GamesInteractor
-        int gameId = getArguments().getInt("game_id", 0);
-        final GameModel game = new GamesInteractor().getGameWithId(gameId);
+        final int gameId = getArguments().getInt("game_id", 0);
+        gamesInteractorFirebase = new GamesInteractorFirebase();
+        gamesInteractorFirebase.getGames(new GameInteractorCallback() {
 
-        // UPDATE VIEW WITH GAME MODEL DATA
-        ImageView icono = fragmentView.findViewById(R.id.game_icon);
-        icono.setImageResource(game.getIconDrawable());
 
-        // 1. CAMBIAR IMAGEN DE FONDO
-        LinearLayout fondoLayout = fragmentView.findViewById(R.id.game_image_container);
-        fondoLayout.setBackgroundResource(game.getBackgroundDrawable());
-
-        // 2. CAMBIAR DESCRIPCION
-        TextView descriptionTextView = fragmentView.findViewById(R.id.game_description);
-        descriptionTextView.setText(game.getDescription());
-
-        // 3. DEFINIR ACCION PARA EL BOTON
-        Button boton = fragmentView.findViewById(R.id.website_button);
-        boton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent webIntent = new Intent(getContext(), WebViewActivity.class);
-                webIntent.putExtra("url", game.getOfficialWebsiteUrl());
-                startActivity(webIntent);
+            public void onGamesAvailable() {
+                final GameModel game = gamesInteractorFirebase.getGameWithId(gameId);
+
+                // UPDATE VIEW WITH GAME MODEL DATA
+                ImageView icono = getView().findViewById(R.id.game_icon);
+
+                //icono.setImageResource(game.getIconDrawable());
+
+                // 1. CAMBIAR IMAGEN DE FONDO
+                ImageView fondo = getView().findViewById(R.id.background);
+                Glide.with(getView()).load(
+                        game.getBackground())
+                        .into(fondo);
+
+                //fondoLayout.setBackgroundResource(game.getBackgroundDrawable());
+
+                // 2. CAMBIAR DESCRIPCION
+                TextView descriptionTextView = getView().findViewById(R.id.game_description);
+                descriptionTextView.setText(game.getDescription());
+
+                // 3. DEFINIR ACCION PARA EL BOTON
+                Button boton = getView().findViewById(R.id.website_button);
+                boton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent webIntent = new Intent(getContext(), WebViewActivity.class);
+                        webIntent.putExtra("url", game.getOfficialWebsiteUrl());
+                        startActivity(webIntent);
+                    }
+                });
             }
         });
-
         return fragmentView;
     }
 }

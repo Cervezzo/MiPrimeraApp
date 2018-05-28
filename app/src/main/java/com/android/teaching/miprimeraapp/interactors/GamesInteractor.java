@@ -15,21 +15,34 @@ public class GamesInteractor {
     public GamesInteractor() {
         // Si no tengo juegos, los creo
         if (games == null) {
-            GameModel overwatchGameModel = new GameModel(0, "Overwatch",
+            GameModel overwatchGameModel = new GameModel(
+                    0,
+                    "Overwatch",
                     "Descripción Overwatch",
                     "https://playoverwatch.com/en-us/",
-                    R.drawable.overwatch_icon,
-                    R.drawable.overwatch_landing);
+                    "",
+                    "");
 
-            GameModel lolGameModel = new GameModel(1, "League Of Legends",
+            GameModel lolGameModel = new GameModel(
+                    1,
+                    "League Of Legends",
                     "Descripción LoL",
                     "https://play.euw.leagueoflegends.com/es_ES",
-                    R.drawable.lol_icon,
-                    R.drawable.lol_background);
+                    "",
+                    "");
+
+            GameModel bladeGameModel = new GameModel(
+                    2,
+                    "Mount and Blade: Bannerlord",
+                    "Descripción Bannerlord",
+                    "https://www.taleworlds.com/en/Games/Bannerlord/News",
+                    "",
+                    "");
 
             games = new ArrayList<>();
             games.add(overwatchGameModel);
             games.add(lolGameModel);
+            games.add(bladeGameModel);
         }
     }
 
