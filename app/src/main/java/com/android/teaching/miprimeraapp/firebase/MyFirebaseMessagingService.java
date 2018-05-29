@@ -22,46 +22,45 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Map<String,String> data = remoteMessage.getData();
+        Map<String, String> data = remoteMessage.getData();
         Log.d("Mensaje", "Data receiver: " + data.toString());
 
-        if (data.containsKey("show_notification")){
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (data.containsKey("show_notification")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 createNotificationForOreo();
 
-            }else{
-                 createNotificationForLowerThanOreo();
-                }
+            } else {
+                createNotificationForLowerThanOreo();
             }
         }
+    }
 
 
+    private void createNotificationForLowerThanOreo() {
+        NotificationCompat.Builder builder = new NotificationCompat
+                .Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("HOLA CLASE")
+                .setContentInfo("que haseiiiiiiis");
 
-private void createNotificationForLowerThanOreo(){
-    NotificationCompat.Builder builder = new NotificationCompat
-            .Builder(this)
-            .setSmallIcon(R.drawable.ic_child)
-            .setContentTitle("HOLA CLASE")
-            .setContentInfo("que haseiiiiiiis");
+        NotificationManager notificationManager =
+                getSystemService(NotificationManager.class);
+        notificationManager.notify(1, builder.build());
+    }
 
-    NotificationManager notificationManager =
-            getSystemService(NotificationManager.class);
-    notificationManager.notify(1, builder.build());
-}
+    @TargetApi(26)
+    private void createNotificationForOreo() {
+        NotificationChannel channel = new NotificationChannel("ID", "name", NotificationManager.IMPORTANCE_HIGH);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
 
-@TargetApi(26)
-private void createNotificationForOreo() {
-    NotificationChannel channel = new NotificationChannel("ID", "name", NotificationManager.IMPORTANCE_HIGH);
-    NotificationManager notificationManager = getSystemService(NotificationManager.class);
-    notificationManager.createNotificationChannel(channel);
+        Notification.Builder builder = new Notification
+                .Builder(this, "ID")
+                .setSmallIcon(R.mipmap.ic_games)
+                .setContentTitle("HOLA CLASE")
+                .setContentText("hoy estais de lunes blablabla");
 
-    Notification.Builder builder = new Notification
-            .Builder(this, "ID")
-            .setSmallIcon(R.drawable.ic_child)
-            .setContentTitle("HOLA CLASE")
-            .setContentText("hoy estais de lunes blablabla");
-
-    notificationManager.notify(1, builder.build());
+        notificationManager.notify(1, builder.build());
     }
 }
 

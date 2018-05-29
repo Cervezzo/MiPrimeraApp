@@ -1,8 +1,18 @@
 package com.android.teaching.miprimeraapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +28,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.teaching.miprimeraapp.interactors.GameInteractorCallback;
 import com.android.teaching.miprimeraapp.interactors.GamesInteractor;
@@ -38,34 +49,64 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
-    private  GamesInteractorFirebase gamesInteractorFirebase;
+    private GamesInteractorFirebase gamesInteractorFirebase;
     private MyAdapter myAdapter;
     private ListView listView;
+    private MyConnectivityBroadcastReceiver myConnectivityBroadcastReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        String token = FirebaseInstanceId.getInstance().getToken();
-        //PRUEBAS FIREBASE
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = firebaseDatabase
-                .getReference("device_push_token");
-        myRef.setValue(token);
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            // Tenemos permisos
+            LocationManager locationManager = (LocationManager)
+                    getSystemService(Context.LOCATION_SERVICE);
+            obtenerUbicacion();
 
-        gamesInteractorFirebase = new GamesInteractorFirebase();
-        gamesInteractorFirebase.getGames(new GameInteractorCallback() {
-            @Override
-            public void onGamesAvailable() {
-                findViewById(R.id.loading).setVisibility(View.GONE);
-                //Aquí, GamesInteractorFirebase ya tiene la lista de juegos
+        } else {
+            // No tenemos permisos
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    100);
+        }
 
-                myAdapter = new MyAdapter();
-                listView.setAdapter(myAdapter);
-            }
-        });
+        //determinar si tenemos internet o no
+        ConnectivityManager cm = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean hasConnectivity = activeNetwork != null
+                && activeNetwork.isConnectedOrConnecting();
 
+        if (hasConnectivity) {
+            //region Firebase
+            String token = FirebaseInstanceId.getInstance().getToken();
+            //PRUEBAS FIREBASE
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = firebaseDatabase
+                    .getReference("device_push_token");
+            myRef.setValue(token);
+            gamesInteractorFirebase = new GamesInteractorFirebase();
+            gamesInteractorFirebase.getGames(new GameInteractorCallback() {
+                @Override
+                public void onGamesAvailable() {
+                    findViewById(R.id.loading).setVisibility(View.GONE);
+                    //Aquí, GamesInteractorFirebase ya tiene la lista de juegos
+
+                    myAdapter = new MyAdapter();
+                    listView.setAdapter(myAdapter);
+                }
+            });//endregion
+        } else {
+            //mostrar TOAST y esconder loading
+            findViewById(R.id.loading).setVisibility(View.GONE);
+            Toast.makeText(this, "no hay conexión a internet",
+                    Toast.LENGTH_SHORT).show();
+        }
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
@@ -81,6 +122,71 @@ public class ListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[],
+                                           int[] grantResults) {
+        if (requestCode == 100) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //el usuario acepta los permisos
+            } else {
+                //el usuario NO acepta los permisos
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+
+    private void obtenerUbicacion(){
+
+        LocationManager locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+
+        LocationListener listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d("Location changed", location.toString());
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,listener);
+
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        myConnectivityBroadcastReceiver = new MyConnectivityBroadcastReceiver();
+        registerReceiver(myConnectivityBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(myConnectivityBroadcastReceiver);
     }
 
     @Override
