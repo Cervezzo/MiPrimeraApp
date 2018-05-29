@@ -151,7 +151,7 @@ public class ListActivity extends AppCompatActivity {
         LocationListener listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Log.d("Location changed", location.toString());
+                Log.d("ListActivity", "location changed: "+ location.toString());
             }
 
             @Override
