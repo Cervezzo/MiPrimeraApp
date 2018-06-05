@@ -92,7 +92,9 @@
         <service
             android:name=".mediaplayer.MediaPlayerService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+
+        </service>
     </application>
 
 </manifest>
