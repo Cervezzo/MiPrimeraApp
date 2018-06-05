@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mediaplayer.MediaPlayerActivity"
+    android:id="@+id/activity_media_player"
+    android:orientation="vertical"
+    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbarPlayer"
+        app:title="@string/MUSIC"
+
+        android:background="@color/colorAccent"
+        >
+
+    </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:layout_below="@+id/toolbarPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeuno">
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonPlayer"
+        android:text="@string/play_pause"
+        android:onClick="onPlay"
+        />
+
+    <Button
+        android:layout_toRightOf="@+id/buttonPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonPause"
+        android:text="@string/stop"
+        android:onClick="onPauseMusic"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/relativeuno"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <VideoView
+            android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+        <MediaController
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </MediaController>
+    </RelativeLayout>
+
+
+</RelativeLayout>

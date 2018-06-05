@@ -4,11 +4,17 @@ import android.app.DatePickerDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Entity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -86,9 +92,12 @@ public class ProfileActivity extends AppCompatActivity {
             if (profileImage.exists()) {
                 ImageView profileImageView = findViewById(R.id.image_profile);
                 profileImageView.setImageURI(Uri.fromFile(profileImage));
+
+
             }
         }
     }
+
 
     @Override
     protected void onStart() {
@@ -114,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
                 radioButtonFemale.setChecked(true);
             }
         }
+
 
     }
 
@@ -150,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (radioButtonMale.isChecked()) {
             // El usuario ha seleccionado "H"
             Log.d("ProfileActivity", "Gender: male");
-        } else if(radioButtonFemale.isChecked()) {
+        } else if (radioButtonFemale.isChecked()) {
             // El usuario ha seleccionado "M"
             Log.d("ProfileActivity", "Gender: female");
         }
@@ -169,7 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
             myNewUser.setAge(ageEditText.getText().toString());
             if (radioButtonMale.isChecked()) {
                 myNewUser.setGender("H");
-            } else if (radioButtonFemale.isChecked()){
+            } else if (radioButtonFemale.isChecked()) {
                 myNewUser.setGender("M");
             }
             myDatabase.userDao().insert(myNewUser);
@@ -186,7 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * Método que se ejecutará cuando el usuario pulse "Delete"
      *
-     * @param view  -
+     * @param view -
      */
     public void onDelete(View view) {
         // Mostrar un dialogo de confirmación
@@ -241,12 +251,41 @@ public class ProfileActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        File myFile = createImageFile();
+        ImageView imageView = findViewById(R.id.image_profile);
+        //CREAMOS ESTA LINEA PARA OBLIGAR A SOBREESCRIBIR PORQUE IMAGEVIEW NO ENTIENDE
+        //HEMOS CAMBIADO LA IMAGEN PERO SE LLAMA IGUAL
+        imageView.setImageBitmap(BitmapFactory.decodeFile(myFile.getAbsolutePath()));
+    }
 
 
+    public void camaraIntent(View view) {
+        //el usuario a pulsado una imagen de perfil
 
+        Intent takePictureIntent = new
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        if (takePictureIntent.resolveActivity(getPackageManager())
+                != null) {
+            File photoFile = createImageFile();
+            Uri photoURI = FileProvider.getUriForFile(this,
+                    "com.android.teaching.miprimeraapp",
+                    photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    photoURI);
+            startActivityForResult(takePictureIntent, 100);
+        }
 
+    }
 
-
+    private File createImageFile() {
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return new File(storageDir, "profile.jpg");
+    }
 
 }
