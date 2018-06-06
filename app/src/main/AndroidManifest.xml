@@ -82,11 +82,7 @@
         </receiver>
 
         <activity android:name=".mediaplayer.MediaPlayerActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
@@ -95,6 +91,15 @@
             android:exported="true">
 
         </service>
+
+        <activity android:name=".reactivex.ReactiveXActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
